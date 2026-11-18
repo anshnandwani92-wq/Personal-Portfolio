@@ -1,0 +1,12 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { serviceLanes } from '../../lib/service-lanes';
+export const prerender = true;
+export function getStaticPaths() { return serviceLanes.map((service) => ({ params: { slug: service.slug }, props: { service } })); }
+const { service } = Astro.props;
+---
+<SiteLayout title={`${service.title} | Ansh Nandwani`} description={service.intro} path={`/services/${service.slug}`}>
+  <section class="page-hero container"><h1>{service.heading}</h1><p>{service.intro}</p></section>
+  <section class="section-tight container"><div class="detail-list"><article class="card detail-card"><h2>Who it’s for</h2><p>{service.who}</p></article><article class="card detail-card"><h2>What we can do</h2><ul>{service.points.map((point) => <li>{point}</li>)}</ul></article><article class="card detail-card"><h2>How we work</h2><p>Start with an audit, agree what success looks like, then pilot the smallest useful change. Scale when the evidence and team are ready.</p></article><article class="card detail-card"><h2>Tools and platforms</h2><p>{service.tools}</p></article></div></section>
+  <section class="section container"><div class="cta-panel"><h2>Let’s scope the work around your goal.</h2><p>Share the challenge and what you’ve tried so far. We’ll find a practical next step.</p><a class="button button-primary book-link" href="/contact#booking" data-track="book_call_click">Book a call <span aria-hidden="true">↗</span></a></div></section>
+</SiteLayout>

@@ -1,0 +1,15 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+export const prerender = true;
+const audiences = [
+  { title: 'Marketing leaders at brands', text: 'Teams improving personalization, customer journeys or marketing operations across a growing stack.', points: ['Campaign and audience strategy', 'Personalization testing and rollout', 'AI-assisted workflows'] },
+  { title: 'CRM and data leaders', text: 'Teams connecting CRM, identity, digital behavior and activation across markets.', points: ['Customer data and identity design', 'Salesforce and Adobe platform integration', 'A clear path from data to action'] },
+  { title: 'Agency executives', text: 'Leaders who need a stronger product story, data capability or experienced delivery partner.', points: ['Product and measurement strategy', 'Media pacing and performance', 'Specialist support for client work'] },
+  { title: 'Ad-tech teams and publishers', text: 'Teams improving advertising products, audience design, cross-channel planning and yield.', points: ['Product roadmaps and prototypes', 'Identity and first-party audiences', 'Planning and measurement improvements'] },
+];
+---
+<SiteLayout title="Who I Help | Ansh Nandwani" description="Support for marketing, CRM and data leaders at brands, agencies, ad-tech teams and publishers." path="/who-i-help">
+  <section class="page-hero container"><h1>For teams connecting marketing and technology.</h1><p>Bring the business context, platform constraints and ambition. I’ll help your team choose a useful next move and carry it into delivery.</p></section>
+  <section class="section-tight container"><div class="detail-list">{audiences.map((audience) => <article class="card detail-card"><h2>{audience.title}</h2><p>{audience.text}</p><ul>{audience.points.map((point) => <li>{point}</li>)}</ul></article>)}</div></section>
+  <section class="section container"><div class="cta-panel"><h2>Let’s talk about what needs to change.</h2><p>We can compare the goal, timing and a sensible scope.</p><a class="button button-primary book-link" href="/contact#booking" data-track="book_call_click">Book a call <span aria-hidden="true">↗</span></a></div></section>
+</SiteLayout>

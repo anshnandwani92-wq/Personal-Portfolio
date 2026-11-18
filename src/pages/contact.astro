@@ -1,0 +1,46 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+export const prerender = true;
+const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL ?? '';
+const bookingUrl = import.meta.env.PUBLIC_BOOKING_URL ?? '';
+---
+<SiteLayout title="Contact Ansh Nandwani" description="Share the marketing, CRM or customer data challenge you are working through." path="/contact">
+  <section class="page-hero container"><h1>Tell me your goal. I’ll help you find where to start.</h1><p>Share what you’re trying to improve, what is in place today and what you need to decide next.</p></section>
+  <section class="section-tight container contact-layout" id="booking">
+    <div><h2>Start with a useful conversation.</h2><p class="contact-note">Outline the challenge and the people involved. If you already have a booking link, you can choose a time directly; otherwise use the enquiry form and I’ll follow up to arrange a conversation.</p>{bookingUrl && <a class="button button-primary book-link" href={bookingUrl} target="_blank" rel="noreferrer" data-track="book_call_click">Choose a time <span aria-hidden="true">↗</span></a>}<div class="contact-links"><a href={contactEmail ? `mailto:${contactEmail}` : 'mailto:?subject=Consulting%20enquiry'}><span>{contactEmail || 'Email Ansh'}</span><span aria-hidden="true">↗</span></a><a href="https://www.linkedin.com/in/ansh-nandwani/" target="_blank" rel="noopener noreferrer"><span>Connect on LinkedIn</span><span aria-hidden="true">↗</span></a><a href="/work"><span>Review selected work</span><span aria-hidden="true">↗</span></a></div></div>
+    <form class="card contact-card" id="contact-form" data-email={contactEmail}>
+      <h2>What are you working on?</h2>
+      <div class="form-row"><div class="field"><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required /></div><div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" required /></div></div>
+      <div class="field"><label for="company-role">Company and role</label><input id="company-role" name="company-role" autocomplete="organization-title" required /></div>
+      <div class="form-row"><div class="field"><label for="topic">What do you need help with?</label><select id="topic" name="topic"><option>Personalization at scale</option><option>Customer data, CRM and AI agents</option><option>AI automation for marketing teams</option><option>Martech and data audit</option><option>Not sure yet</option></select></div><div class="field"><label for="stage">Where are you today?</label><select id="stage" name="stage"><option>No tool yet</option><option>Tool installed but underused</option><option>Scaling what works</option></select></div></div>
+      <div class="field"><label for="timeline">Timeline</label><select id="timeline" name="timeline"><option>This month</option><option>This quarter</option><option>Exploring</option></select></div>
+      <div class="field"><label for="message">Anything else I should know?</label><textarea id="message" name="message" placeholder="What are you trying to improve?" rows="5"></textarea></div>
+      <button class="button button-primary" type="submit">Prepare email <span aria-hidden="true">↗</span></button><p class="form-hint" id="form-status" aria-live="polite">This opens a draft in your email app. Your details are not stored on this site.</p>
+    </form>
+  </section>
+  <script>
+    const form = document.querySelector<HTMLFormElement>('#contact-form');
+    const status = document.querySelector<HTMLElement>('#form-status');
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const email = form.dataset.email ?? '';
+      const values = new FormData(form);
+      const subject = `Consulting enquiry: ${String(values.get('topic') ?? '')}`;
+      const body = [
+        `Name: ${String(values.get('name') ?? '')}`,
+        `Email: ${String(values.get('email') ?? '')}`,
+        `Company and role: ${String(values.get('company-role') ?? '')}`,
+        `Help needed: ${String(values.get('topic') ?? '')}`,
+        `Current stage: ${String(values.get('stage') ?? '')}`,
+        `Timeline: ${String(values.get('timeline') ?? '')}`,
+        '',
+        String(values.get('message') ?? ''),
+      ].join('\n');
+      window.dispatchEvent(new CustomEvent('site-analytics', { detail: { event: 'contact_form_submit' } }));
+      if ('vibrate' in navigator && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) navigator.vibrate(15);
+      window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      if (status) status.textContent = 'Your email app should open with the enquiry ready to send.';
+    });
+  </script>
+</SiteLayout>

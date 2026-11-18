@@ -1,0 +1,86 @@
+---
+import ThemeToggle from '../components/ThemeToggle';
+import '../styles/global.css';
+interface Props { title: string; description: string; path?: string }
+const { title, description, path = '' } = Astro.props;
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://example.com';
+const canonical = `${siteUrl}${path}`;
+---
+<!doctype html>
+<html lang="en" data-type="service" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#10110f" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="page-type" content="service" />
+    <meta name="site-kind" content="other" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+        document.documentElement.dataset.theme = saved || (prefersLight ? 'light' : 'dark');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', document.documentElement.dataset.theme === 'light' ? '#f1eee6' : '#111923');
+      } catch { /* Keep the server-rendered theme when storage is unavailable. */ }
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'ProfessionalService', name: 'AI, Data and Martech Consultant',
+      description, url: canonical, areaServed: ['Toronto', 'Canada', 'United States'],
+      founder: { '@type': 'Person', name: 'Ansh Nandwani' },
+    })} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="ambient-backdrop" aria-hidden="true"><canvas data-ambient-shader></canvas></div>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="AI, Data and Martech Consultant home"><span class="wordmark-mark">A<span>.</span></span><span class="wordmark-label">AI, Data &<br />Martech Consultant</span></a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="/services">Services</a><a href="/work">Work</a><a href="/about">About</a><a href="/contact">Contact</a>
+      </nav>
+      <div class="header-actions"><ThemeToggle client:idle /><a class="button button-small button-primary book-link" href="/contact#booking" data-track="book_call_click">Book a call <span aria-hidden="true">↗</span></a></div>
+      <details class="mobile-menu">
+        <summary aria-label="Open site navigation"><span>Menu</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 6 5 5 5-5" /></svg></summary>
+        <nav class="mobile-nav" aria-label="Main navigation">
+          <a href="/services">Services</a><a href="/work">Work</a><a href="/about">About</a><a href="/contact">Contact</a>
+          <a class="mobile-menu-cta" href="/contact#booking">Book a call <span aria-hidden="true">↗</span></a>
+        </nav>
+      </details>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="footer-top"><a class="wordmark" href="/"><span class="wordmark-mark">A<span>.</span></span><span class="wordmark-label">AI, Data &<br />Martech Consultant</span></a><p>Customer data, personalization and AI for better marketing.</p><a class="button button-primary" href="/contact#booking" data-track="book_call_click">Book a call <span aria-hidden="true">↗</span></a></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} Ansh Nandwani · Toronto, Canada</span><div><a href="/services">Services</a><a href="/work">Work</a><a href="/about">About</a><a href="/contact">Contact</a><a href="https://www.linkedin.com/in/ansh-nandwani/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="mailto:?subject=Consulting%20enquiry">Email</a><a href="/privacy">Privacy</a><a href="/sitemap-index.xml">Sitemap</a></div></div>
+    </footer>
+    <script>
+      import { mountAmbientShader } from '../lib/ambient-shader';
+
+      mountAmbientShader();
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reveals = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (!reducedMotion && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('js-motion');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        reveals.forEach((element) => observer.observe(element));
+      } else reveals.forEach((element) => element.classList.add('is-visible'));
+      document.querySelectorAll<HTMLAnchorElement>('[data-track="book_call_click"]').forEach((link) => {
+        link.addEventListener('click', () => {
+          window.dispatchEvent(new CustomEvent('site-analytics', { detail: { event: 'book_call_click' } }));
+          if ('vibrate' in navigator && !reducedMotion) navigator.vibrate(15);
+        });
+      });
+    </script>
+  </body>
+</html>

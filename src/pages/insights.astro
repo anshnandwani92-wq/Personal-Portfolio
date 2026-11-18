@@ -1,0 +1,14 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+export const prerender = true;
+const topics = [
+  { category: 'AI & automation', title: 'How to choose an AI pilot that can make it to production', summary: 'A practical way to assess value, readiness and the people who will use the result.' },
+  { category: 'Customer data', title: 'What a useful customer view needs from the operating model', summary: 'Why a data model alone cannot fix disconnected customer experiences.' },
+  { category: 'Marketing technology', title: 'Where to start with a martech and data audit', summary: 'A practical way to review tracking, identity, platforms and the gaps that block useful activation.' },
+];
+---
+<SiteLayout title="Insights | AI, Data and Martech Consultant" description="Practical perspectives on AI, customer data, personalization and marketing technology." path="/insights">
+  <section class="page-hero container"><h1>Useful thinking for the work ahead.</h1><p>Short, practical notes on AI, customer data, personalization and the systems that connect them.</p></section>
+  <section class="section-tight container"><div class="service-grid">{topics.map((topic) => <article class="card insight-card"><div><span class="eyebrow">{topic.category}</span><h2>{topic.title}</h2><p>{topic.summary}</p></div><span class="contact-note">Article draft in progress</span></article>)}</div></section>
+  <section class="section container"><div class="cta-panel"><h2>Let’s talk through the real-world version.</h2><p>Bring a question from your team and we’ll explore the practical options.</p><a class="button button-primary book-link" href="/contact#booking" data-track="book_call_click">Book a call <span aria-hidden="true">↗</span></a></div></section>
+</SiteLayout>
