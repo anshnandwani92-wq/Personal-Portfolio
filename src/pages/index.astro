@@ -64,22 +64,22 @@ const approach = [
   <div class="trust-strip" aria-label="Selected results"><div class="container proof-strip"><span><strong>CAD $30M</strong> first-year product revenue</span><span><strong>120%+</strong> fill-rate lift</span><span>Near-real-time media and sales measurement</span></div></div>
 
   <section class="section container" id="services" data-reveal>
-    <div class="section-heading"><div><h2>Four ways to make marketing work better.</h2></div><p>For marketing, CRM and data leaders, and the agency teams that help them move.</p></div>
+    <div class="section-heading"><div><h2>Four ways to make marketing work better.</h2></div></div>
     <div class="service-grid">{serviceLanes.map((service) => <a class="card service-card" href={`/services/${service.slug}`} data-spotlight><h3>{service.title}</h3><p>{service.intro}</p><span class="card-arrow" aria-hidden="true">↗</span></a>)}</div>
   </section>
 
   <section class="section container" id="results" data-reveal>
-    <div class="section-heading"><div><h2>Results a marketer can understand.</h2></div><p>Selected outcomes from product, media and customer data work.</p></div>
+    <div class="section-heading"><div><h2>Driving measurable impact.</h2></div></div>
     <div class="proof-grid">
       <article class="card proof-card"><div class="proof-number">CAD $30M</div><p class="proof-caption">First-year revenue from a cross-channel planning and measurement product.</p></article>
       <article class="card proof-card"><div class="proof-number">120%+</div><p class="proof-caption">Fill-rate lift after introducing custom campaign pacing curves with ad-serving partners.</p></article>
       <article class="card proof-card proof-card-qualitative"><div class="proof-number">Near real time</div><p class="proof-caption">Media, sales and store-visit data brought together for better campaign planning and attribution.</p></article>
     </div>
-    <p class="proof-note">Employer and client details are kept private. Results are presented as described in the source materials.</p>
+    
   </section>
 
   <section class="section container" id="approach" data-reveal>
-    <div class="section-heading"><div><h2>Start with the foundation. Scale what works.</h2></div><p>Every engagement is shaped around the question, the systems and the team doing the work.</p></div>
+    <div class="section-heading"><div><h2>Start with the foundation. Scale what works.</h2></div></div>
     <div class="approach-grid approach-grid-four">{approach.map((step, index) => <article class="card approach-card"><span class="card-index">0{index + 1} · {['Audit', 'Foundation', 'Launch', 'Handoff'][index]}</span><h3>{step.title}</h3><p>{step.copy}</p></article>)}</div>
   </section>
 
